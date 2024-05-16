@@ -146,7 +146,7 @@ class CARLCS_CNN:
                               name='embedding_desc')
         desc_embedding = embedding(desc)
         dropout = Dropout(0.25,name='dropout_desc_embed')
-        desc_dropout = dropout(desc_embedding)1
+        desc_dropout = dropout(desc_embedding)
 
         desc_conv1 = Conv1D(100,2,padding='valid', activation='relu',strides=1,name='desc_conv1')
         desc_conv2 = Conv1D(100,3,padding='valid', activation='relu',strides=1,name='desc_conv2')
