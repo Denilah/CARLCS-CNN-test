@@ -165,6 +165,7 @@ class CodeSearcher:
 
             if valid_every is not None and i % valid_every == 0:
                 acc1,mrr = self.valid(model,1000,1)
+                print('acc1:{}, mrr:{}'.format(acc1,mrr))
                         
             if save_every is not None and i % save_every == 0:
                 self.save_model_epoch(model, i)
