@@ -19,6 +19,7 @@ import tables
 import configs
 import codecs
 import logging
+from tqdm import tqdm
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO, format="%(asctime)s: %(name)s: %(levelname)s: %(message)s")
 
@@ -74,6 +75,9 @@ class CodeSearcher:
         table = tables.open_file(vecfile)
         data, index = (table.get_node('/phrases'),table.get_node('/indices'))
         data_len = index.shape[0]
+
+        print("Loading data...{},{}".format(vecfile, data_len))
+
         if chunk_size==-1:#if chunk_size is set to -1, then, load all data
             chunk_size=data_len
         start_offset = start_offset%data_len
@@ -83,7 +87,7 @@ class CodeSearcher:
         sents = []
         while offset < start_offset+chunk_size:
             if offset>=data_len:   
-                logger.warn('Warning: offset exceeds data length, starting from index 0..')             
+                # logger.warn('Warning: offset exceeds data length, starting from index 0..')             
                 chunk_size=start_offset+chunk_size-data_len
                 start_offset=0
                 offset=0
@@ -138,7 +142,7 @@ class CodeSearcher:
         valid_every = self.train_params.get('valid_every', None)
         save_every = self.train_params.get('save_every', None)
         batch_size = self.train_params.get('batch_size', 128)
-        nb_epoch = self.train_params.get('nb_epoch', 10)
+        nb_epoch = self.train_params.get('nb_epoch', 15)
         split = self.train_params.get('validation_split', 0)
         
         val_loss = {'loss': 1., 'epoch': 0}
@@ -188,7 +192,8 @@ class CodeSearcher:
            
         c_1, c_2 = 0, 0        
         data_len=len(self._eval_sets['descs'])
-        for i in range(data_len):
+        print("valid dataset length:", data_len)
+        for i in tqdm(range(data_len), desc="---------------------Valid----------------------"):
             bad_descs=[desc for desc in self._eval_sets['descs']]
             random.shuffle(bad_descs)
             descs=bad_descs 
@@ -275,8 +280,7 @@ class CodeSearcher:
             self._eval_sets['descs']=descs
         recall,acc,mrr,map,ndcg=0,0,0,0,0
         data_len=len(self._eval_sets['descs'])
-        for i in range(data_len):
-            print(i) 
+        for i in tqdm(range(data_len), desc="---------------------Eval----------------------"):
             desc=self._eval_sets['descs'][i]#good desc
             descs=self.pad([desc]*data_len,self.data_params['desc_len'])
             methnames=self.pad(self._eval_sets['methnames'],self.data_params['methname_len'])

@@ -28,8 +28,8 @@ def get_config():
         },               
         'training_params': {           
             'batch_size': 128,
-            'chunk_size':100000,
-            'nb_epoch': 2000,
+            'chunk_size':-1,
+            'nb_epoch': 15,
             'validation_split': 0.2,
             # 'optimizer': 'adam',
             #'optimizer': Adam(clip_norm=0.1),
