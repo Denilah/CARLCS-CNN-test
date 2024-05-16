@@ -2,9 +2,10 @@
 
 ## Dependency
 > Tested in Ubuntu 16.04
-* Python 2.7-3.6
-* Keras 2.0.0 or newer
-* Tensorflow or Theano 0.8.0~0.9.1
+* Python 3.6.0
+* Keras 2.0.5
+* Tensorflow 1.3.0
+* Theano 0.9.0
 
 
 ## Usage
